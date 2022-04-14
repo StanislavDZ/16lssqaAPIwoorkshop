@@ -1,100 +1,45 @@
 package reqres;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ReqresTestAPI {
 
     @Test
-    void singlUserTest(){
+    @DisplayName("Добавить товар в корзину")
+    void addJewelryToCart() {
         given()
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .cookie("Nop.customer=16d5f2e3-1840-400f-9e7a-cf319a2733fd;")
+                .body("addtocart_14.EnteredQuantity=1")
                 .when()
-                .get("https://reqres.in/api/users/9")
+                .post("http://demowebshop.tricentis.com/addproducttocart/catalog/14/1/1")
                 .then()
-                .body("data.first_name", is("Tobias"))
+                .body("success", is(true))
+                .body("message", is("The product has been added to your <a href=\"/cart\">shopping cart</a>"))
+                .body("updatetopcartsectionhtml", is(notNullValue()))
                 .statusCode(200);
     }
 
     @Test
-    void singlUserNotFoundTest(){
+    @DisplayName("Добавить товар в вишлист")
+    void addJewelryToWishList() {
         given()
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .cookie("Nop.customer=16d5f2e3-1840-400f-9e7a-cf319a2733fd;")
+                .body("addtocart_14.EnteredQuantity=1")
                 .when()
-                .get("https://reqres.in/api/users/23")
+                .post("http://demowebshop.tricentis.com/addproducttocart/details/14/2")
                 .then()
-                //.body("data.first_name", is("Zaratus"))
-                .statusCode(404);
-    }
-
-
-    String inputDataCreate = "{\"name\": \"Zaratus\", " +
-            "\"job\": \"global legend\"}";
-    @Test
-    void createUserTest(){
-        given()
-                .body(inputDataCreate)
-                .contentType(JSON)
-                .when()
-                .post("https://reqres.in/api/users")
-                .then()
-                .body("name", is("Zaratus"))
-                .statusCode(201);
-    }
-
-
-
-    String inputDataUpdate = "{\"name\": \"Zaratus\", " +
-            "\"job\": \"local legend\"}";
-    @Test
-    void updateUserTest(){
-        given()
-                .body(inputDataUpdate)
-                .contentType(JSON)
-                .when()
-                .put("https://reqres.in/api/users")
-                .then()
-                .body("job", is("local legend"))
+                .body("success", is(true))
+                .body("message", is("The product has been added to your <a href=\"/wishlist\">wishlist</a>"))
+                .body("updatetopwishlistsectionhtml", is(notNullValue()))
                 .statusCode(200);
     }
-
-    @Test
-    void deleteUserTest(){
-        given()
-                .when()
-                .delete("https://reqres.in/api/users/2")
-                .then()
-                .statusCode(204);
-    }
-
-
-    String inputDataRegister = "{\"email\": \"eve.holt@reqres.in\", " +
-            "\"password\": \"pistol\"}";
-    @Test
-    void registerSuccessfulTest(){
-        given()
-                .body(inputDataRegister)
-                .contentType(JSON)
-                .when()
-                .post("https://reqres.in/api/register")
-                .then()
-                .body("token", is("QpwL5tke4Pnpja7X4"))
-                .statusCode(200);
-    }
-
-
-    String inputDataError = "{\"email\": \"sydney@fife\"}" ;
-    @Test
-    void registerUnSuccessfulTest(){
-        given()
-                .body(inputDataError)
-                .contentType(JSON)
-                .when()
-                .post("https://reqres.in/api/register")
-                .then()
-                .statusCode(400);
-    }
-
-
 
 }
+
