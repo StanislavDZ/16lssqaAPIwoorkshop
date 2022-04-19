@@ -17,7 +17,7 @@ public class WorkShopTest {
     }
 
     @Test
-    @DisplayName("Добавить товар в корзину")
+    @DisplayName("Добавить товар 1 в корзину")
     void addJewelryToCart() {
         given()
                 .filter(withCustomTemplates())
@@ -36,7 +36,7 @@ public class WorkShopTest {
 
 
     @Test
-    @DisplayName("Добавить товар в корзину")
+    @DisplayName("Добавить товар 2 в корзину")
     void addJewelry1ToCart() {
         given()
                 .filter(withCustomTemplates())
